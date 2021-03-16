@@ -14,6 +14,5 @@
 	response.sendRedirect("login.jsp"); // 단순 이동
 %> --%>
 
-
 </body>
 </html>

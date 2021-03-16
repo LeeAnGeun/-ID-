@@ -104,11 +104,11 @@ public class MemberDao {
 	 }
 	 
 	 // 로그인을 위한 메소드
-	 public boolean checkmember(String id, String pwd) {
+	 public boolean checkmember(MemberDto dto) {
 		 String sql = " SELECT ID "
 					+ " FROM MEMBER "
-					+ " WHERE ID = '" + id + "' "
-					+ " AND PWD = '" + pwd + "' ";
+					+ " WHERE ID = '" + dto.getId() + "' "
+					+ " AND PWD = '" + dto.getPwd() + "' ";
 		// System.out.println(sql);
 		 
 		 /* 다른 방식
