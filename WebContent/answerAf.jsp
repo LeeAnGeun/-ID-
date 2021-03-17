@@ -1,7 +1,21 @@
-<%@page import="dao.BbsDao"%>
 <%@page import="dto.BbsDto"%>
+<%@page import="dao.BbsDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%
+request.setCharacterEncoding("utf-8");
+%>
+
+<%
+int seq = Integer.parseInt(request.getParameter("seq"));
+String id = request.getParameter("id");
+String title = request.getParameter("title");
+String content = request.getParameter("content");
+
+System.out.println(id + " " + title + " " + content);
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,35 +25,24 @@
 <body>
 
 <%
-request.setCharacterEncoding("utf-8");
-String id = request.getParameter("id");
-String title = request.getParameter("title");
-String content = request.getParameter("content");
-
-System.out.println(id + " " + title + " " + content);
-
-BbsDto bdto = new BbsDto(id, title, content);
-
 BbsDao dao = BbsDao.getInstance();
-boolean b = dao.addBbslist(bdto);
 
-if(b){
-	%>
+boolean isS = dao.answer(seq, new BbsDto(id, title, content));
+if(isS){
+%>
 	<script type="text/javascript">
-	alert("게시물이 추가되었습니다.");
+	alert("답글입력 성공");
 	location.href = "bbslist.jsp";
 	</script>
-	<%
+<%
 }else{
-	%>
+%>
 	<script type="text/javascript">
-	alert("게시물 추가에 실패하였습니다. 다시 작성해주세요");
-	location.href = "bbswrite.jsp";
+	alert("답글입력 실패");
+	location.href = "bbslist.jsp";
 	</script>
-	<%
+<%
 }
 %>
-
-
 </body>
 </html>

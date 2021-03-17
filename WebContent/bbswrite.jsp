@@ -14,6 +14,7 @@
 <body>
 
 <%
+request.setCharacterEncoding("utf-8");
 //	String id = request.getParameter("id");
 //	MemberDao dao = MemberDao.getInstance();
 //	MemberDto dto = new MemberDto();

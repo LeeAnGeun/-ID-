@@ -1,3 +1,4 @@
+<%@page import="dto.MemberDto"%>
 <%@page import="dto.BbsDto"%>
 <%@page import="dao.BbsDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -13,12 +14,21 @@
 </head>
 <body>
 <%
+request.setCharacterEncoding("utf-8");
+MemberDto mem = (MemberDto)request.getSession().getAttribute("login");
+%>
+
+
+<%
 	int sqlNumber = Integer.parseInt( request.getParameter("seq") );
 	System.out.println(sqlNumber);
 	
 	BbsDao dao = BbsDao.getInstance();
+	dao.readcount(sqlNumber);	// 조회수 증가
 	BbsDto setDto = dao.getContent(sqlNumber);
+	
 %>
+
 <form action="">
 <div align="center">
 	<table border="1">
@@ -33,7 +43,7 @@
 			<td>제목</td><td><%=setDto.getTitle() %></td>
 		</tr>
 		<tr>
-			<td>조회수</td><td>0</td>
+			<td>조회수</td><td><%=setDto.getReadcount() %></td>
 		</tr>
 		<tr>
 			<td>정보</td><td>없음</td>
@@ -43,8 +53,15 @@
 		</tr>
 	</table>
 	<br>
+	<button type="button" onclick="answerbbs('<%=request.getParameter("seq") %>')" value="댓글추가">댓글추가</button>
+	<% 
+	if(setDto.getId().equals(mem.getId())){
+		%>
 	<button type="button" value="글삭제" id="remove">글삭제</button>
 	<button type="button" value="글수정" id="update">글수정</button>
+	<%
+	}
+	%>
 	<button type="button" value="글목록" id="conlist">글목록</button>
 </div>
 </form>
@@ -53,16 +70,20 @@
 $(document).ready(function() {
 	
 	$("#remove").click(function() {
-		location.href = "removebbs.jsp?sql=" + sqlNumber;
+		location.href = "removebbs.jsp?sql=<%=request.getParameter("seq") %>"
 	});
-	$("#updete").click(function() {
-		location.href = "updatebbs.jsp?sql=" + sqlNumber;
+	$("#update").click(function() {
+		location.href = "updatebbs.jsp?sql=<%=request.getParameter("seq") %>"
 	});
 	$("#conlist").click(function() {
 		location.href = "bbslist.jsp";
 	});
+	
 });
 
+function answerbbs(seq) {
+	location.href = "answer.jsp?seq=" + seq;
+}
 </script>
 
 </body>

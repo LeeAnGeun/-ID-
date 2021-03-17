@@ -9,37 +9,34 @@
 <title>Insert title here</title>
 </head>
 <body>
-
 <%
-request.setCharacterEncoding("utf-8");
-String id = request.getParameter("id");
+int sql = Integer.parseInt( request.getParameter("sql") );
+
 String title = request.getParameter("title");
 String content = request.getParameter("content");
 
-System.out.println(id + " " + title + " " + content);
-
-BbsDto bdto = new BbsDto(id, title, content);
+System.out.println(sql + title + content);
 
 BbsDao dao = BbsDao.getInstance();
-boolean b = dao.addBbslist(bdto);
+boolean isS = dao.updateBbs(sql, title, content);
 
-if(b){
+if(isS){
 	%>
 	<script type="text/javascript">
-	alert("게시물이 추가되었습니다.");
+	alert("글 수정 성공");
+	location.href = "bbslist.jsp";
+	</script>	
+	<%
+}else{	
+	%>
+	<script type="text/javascript">
+	alert("글 수정 실패");
 	location.href = "bbslist.jsp";
 	</script>
 	<%
-}else{
-	%>
-	<script type="text/javascript">
-	alert("게시물 추가에 실패하였습니다. 다시 작성해주세요");
-	location.href = "bbswrite.jsp";
-	</script>
-	<%
 }
-%>
 
+%>
 
 </body>
 </html>

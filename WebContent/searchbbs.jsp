@@ -1,24 +1,28 @@
-<%@page import="dto.BbsDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
+<%@page import="dto.BbsDto"%>
 <%@page import="dao.BbsDao"%>
-<%@page import="dto.MemberDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
 <%
 request.setCharacterEncoding("utf-8");
-Object ologin = session.getAttribute("login");
-MemberDto mem = null;
+String ser = request.getParameter("search");
+String text = request.getParameter("searchbbs");
 
-if(ologin == null){ // 로그인 세션이 없을경우 
-	%>
-	<script>
-	alert('로그인을 해 주십시오');
-	location.href = "login.jsp"; // 다시 login창으로 돌아간다.
-	</script>	
-	<%
-}
+System.out.println(ser + text);
 
-mem = (MemberDto)ologin;
+BbsDao dao = BbsDao.getInstance();
+
+List<BbsDto> list= new ArrayList<BbsDto>();
+
+list = dao.searchBbs(ser, text);
 %>
 
 <%!
@@ -38,23 +42,7 @@ public String arrow(int depth){
 }
 %>
 
-<%
-// dao로 부터 list를 불러온다
-BbsDao dao = BbsDao.getInstance();
-
-List<BbsDto> list = dao.getBbsList();
-%>
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>bbslist(Bulletin Board System) = 전자 게시판</title>
-</head>
-<body>
-<h4 align="right" style="background-color: #f0f0f0">환영합니다. <%=mem.getId() %>님</h4>
-
-<h1>게시판</h1>
+<h4>검색결과입니다</h4>
 
 <form action="searchbbs.jsp">
 <div align="center">
@@ -67,34 +55,26 @@ List<BbsDto> list = dao.getBbsList();
 if(list == null || list.size() == 0){ // 저장된 게시물으 없을 경우
 	%>
 	<tr>
-		<td colspan="3">작성된 글이 없습니다</td>
+		<td colspan="3">검색 결과의 글이 없습니다</td>
 	</tr>
 	<%	
 }else{ // 저장된 게시물이 있을 경우
 	for(int i=0; i<list.size(); i++){
 		BbsDto bbs = list.get(i);
+		if(bbs.getDel()==0){
 		%>
 		<tr>
 			<th><%=i + 1 %></th>
 			<td>
-				<%
-				if(bbs.getDel() == 0) { 
-				%>
 				<%=arrow(bbs.getDepth()) %> <!-- 여백 + 이미지 -->
 				<a href="bbsdetail.jsp?seq=<%=bbs.getSeq() %>">
 					<%=bbs.getTitle() %>
 				</a>
-				<%
-				}else{
-					%>
-					<font color="#ff0000">********* 이 글은 작성자에 의해서 삭제되었습니다</font>
-					<%
-				}
-				%>
 			</td>
 			<td><%=bbs.getId() %></td>
 		</tr>
 		<%
+		}
 	}
 }
 %>
@@ -113,26 +93,5 @@ if(list == null || list.size() == 0){ // 저장된 게시물으 없을 경우
 </div>
 </form>
 
-<form action="bbsList.jsp">
-
-
-</form>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
