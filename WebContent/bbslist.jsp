@@ -99,6 +99,8 @@ $(document).ready(function() {
 
 <h1>게시판</h1>
 
+<a href="calendarlist.jsp">일정관리</a>
+<br>
 <form action="searchbbs.jsp">
 <div align="center">
 <table border="1">
