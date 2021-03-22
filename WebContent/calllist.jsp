@@ -41,7 +41,7 @@ System.out.println(list);
 		CalendarDto dto = list.get(i);
 		%>
 		<tr>
-			<td><%=i %></td><td><a href="caldetail.jsp?seq=<%=dto.getSeq() %>"> <%=dto.getTitle() %> </a></td>
+			<td><%=i+1 %></td><td><a href="caldetail.jsp?seq=<%=dto.getSeq() %>"> <%=dto.getTitle() %> </a></td>
 		</tr>
 		<%
 	}
